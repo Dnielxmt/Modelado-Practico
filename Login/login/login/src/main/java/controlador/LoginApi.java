@@ -1,11 +1,12 @@
+package controlador;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ClienteApplication {
+public class LoginApi {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ClienteApplication.class, args);
+		SpringApplication.run(LoginApi.class, args);
 	}
 
 }
