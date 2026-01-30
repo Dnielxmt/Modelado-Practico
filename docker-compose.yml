@@ -1,0 +1,135 @@
+volumes:  
+  restaurantes_data: {}
+  reservas_data: {}
+  cliente_data: {}
+
+networks: 
+  app-net: {}
+
+
+services:
+  Autenticacion-API:
+    image: autenticacion-api-image
+    build:
+      context: .
+      dockerfile: ./Login/login/login/Dockerfile
+    restart: unless-stopped
+    ports: 
+      - "9080:9080"
+    networks:
+      - app-net
+  
+  Reservas-API:
+    image: reservas-api-image
+    build:
+      context: .
+      dockerfile: ./Reservas/reservas/reservas/Dockerfile
+    restart: unless-stopped
+    ports: 
+      - "8082:8082"
+    networks:
+      - app-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://reservas-database:3306/reservas?createDatabaseIfNotExist=true    
+    depends_on:
+      reservas-database:
+        condition: service_healthy
+
+  Cliente-API:
+    image: cliente-api-image
+    build:
+      context: .
+      dockerfile: ./Clientes/cliente/cliente/Dockerfile
+    restart: unless-stopped
+    ports: 
+      - "8081:8081"
+    networks:
+      - app-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://cliente-database:3306/clientes?createDatabaseIfNotExist=true    
+    depends_on:
+      cliente-database:
+        condition: service_healthy
+
+  Restaurantes-API:
+    image: restaurantes-api-image
+    build:
+      context: .
+      dockerfile: ./Restaurantes/restaurantes/restaurantes/Dockerfile
+    restart: unless-stopped
+    ports: 
+      - "8083:8083"
+    networks:
+      - app-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://restaurantes-database:3306/restaurantes?createDatabaseIfNotExist=true    
+    depends_on:
+      restaurantes-database:
+        condition: service_healthy
+
+  restaurantes-database:
+    image: mysql
+    hostname: MYSQL_ROOT_HOST
+    cap_add:
+      - SYS_NICE
+    restart: unless-stopped
+    ports:
+      - "3307:3306"
+    networks:
+      - app-net
+    volumes:
+      - restaurantes_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password  
+      MYSQL_DATABASE: restaurantes
+      MYSQL_ROOT_HOST: '%'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  reservas-database:
+    image: mysql
+    hostname: MYSQL_ROOT_HOST
+    cap_add:
+      - SYS_NICE
+    restart: unless-stopped
+    ports:
+      - "3308:3306"
+    networks:
+      - app-net
+    volumes:
+      - reservas_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password  
+      MYSQL_DATABASE: reservas
+      MYSQL_ROOT_HOST: '%'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  cliente-database:
+    image: mysql
+    hostname: MYSQL_ROOT_HOST
+    cap_add:
+      - SYS_NICE
+    restart: unless-stopped
+    ports:
+      - "3309:3306"
+    networks:
+      - app-net
+    volumes:
+      - cliente_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password  
+      MYSQL_DATABASE: clientes
+      MYSQL_ROOT_HOST: '%'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
