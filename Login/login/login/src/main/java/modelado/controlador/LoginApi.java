@@ -38,8 +38,8 @@ public class LoginApi {
 
         // Decide a qué API enviar el login
         String ruta = restaurante
-            ? "http://Restaurante-API:8082/restaurantes/login"
-            : "http://Cliente-API:8083/clientes/login";
+            ? "http://localhost:8083/restaurantes/login"
+            : "http://localhost:8081/clientes/login";
 
         Boolean valido;
         try {
@@ -77,8 +77,8 @@ public class LoginApi {
 
         // Decide a qué API enviar el registro
         String ruta = dto.isRestaurante()
-            ? "http://Restaurante-API:8082/restaurantes/registro"
-            : "http://Cliente-API:8083/clientes/registro";
+            ? "http://localhost:8083/restaurantes/registro"
+            : "http://localhost:8081/clientes/registro";
 
         try {
             restTemplate.postForObject(ruta, dto, String.class);

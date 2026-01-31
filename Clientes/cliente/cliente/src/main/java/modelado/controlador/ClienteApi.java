@@ -45,7 +45,7 @@ public class ClienteApi {
 	 * @param dto: datos del cliente
 	 * @return Mensaje de éxito o error
 	 */
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/registro", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String registrarCliente(@RequestBody Registro dto) {
         try {
                 Cliente cliente = new Cliente(

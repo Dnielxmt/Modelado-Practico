@@ -59,7 +59,7 @@ public class RestauranteApi {
      * @param dto: restaurante a registrar con valores mínimos
      * @return
      */
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/registro", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String registrarRestaurante(@RequestBody Registro dto) {
         try {
             // Crear objeto Restaurante
