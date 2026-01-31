@@ -1,3 +1,5 @@
+version: "3.9"
+
 volumes:  
   restaurantes_data: {}
   reservas_data: {}
@@ -5,7 +7,6 @@ volumes:
 
 networks: 
   app-net: {}
-
 
 services:
   Autenticacion-API:
@@ -18,7 +19,7 @@ services:
       - "9080:9080"
     networks:
       - app-net
-  
+
   Reservas-API:
     image: reservas-api-image
     build:
@@ -67,11 +68,9 @@ services:
       restaurantes-database:
         condition: service_healthy
 
+  # Bases de datos
   restaurantes-database:
     image: mysql
-    hostname: MYSQL_ROOT_HOST
-    cap_add:
-      - SYS_NICE
     restart: unless-stopped
     ports:
       - "3307:3306"
@@ -91,9 +90,6 @@ services:
 
   reservas-database:
     image: mysql
-    hostname: MYSQL_ROOT_HOST
-    cap_add:
-      - SYS_NICE
     restart: unless-stopped
     ports:
       - "3308:3306"
@@ -113,9 +109,6 @@ services:
 
   cliente-database:
     image: mysql
-    hostname: MYSQL_ROOT_HOST
-    cap_add:
-      - SYS_NICE
     restart: unless-stopped
     ports:
       - "3309:3306"
@@ -132,4 +125,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
