@@ -122,54 +122,6 @@ Descargue la versión que considere desde esta página:
 
 Download Apache Maven – Maven 
 
-Node.js 
-
-Descargue node.js desde esta página:  
-
-Node.js — Ejecuta JavaScript en cualquier parte 
-
-NVM (Node version manager) 
-
-Descárguelo desde alguno de los siguientes repositorios de git:  
-
-https://github.com/nvm-sh/nvm  
-
-https://github.com/coreybutler/nvm-windows 
-
-Use los siguientes comandos para elegir la versión de node que quieras.  
-
-Instala la última versión de node.  
-
-nvm install latest 
-
-Muestra las versiones de node que tenemos.  
-
-nmv list 
-
-Iindicar qué versión de node queremos ejecutar. 
-
-nvm use versión 
-
- 
-
-Angular-CLI 
-
-Instale Angular-Cli  
-
-https://cli.angular.io/ 
-
-https://angular.io/cli 
-
-https://github.com/angular/angular-cli 
-
-Para ello, abrir en entorno de comandos y desde él ejecutar:  
-
-npm install -g @angular/cli 
-
-Para comprobar las versiones instaladas ejecutar: 
-
-ng --version. 
-
 WSL: 
 
 Descargue la versión 2 de WSL, puede hacerlo por línea de comando con:  
@@ -197,38 +149,16 @@ Para configúrarla deberá crear un host y una contraseña, esto es importante p
 
 Puesta en marcha de contenedores Docker. 
 
-Lo primero que debes hacer es crear la imagen del MySQL, para ello debes seguir los pasos en esta web 
-
-mysql - Official Image | Docker Hub.  
-
-Este primer paso es importante ya que usaremos esa misma base de datos para configurar los accesos de los microservicios. 
-
-El siguiente paso es tomar la aplicación de nuestro repositorio git, esto ya lo tiene todo preparado, lo único que debe hacer es modificar el archivo “application.properties” que están en los microservicios de usuarios, hoteles y reservas para que coincidan las siguientes dos líneas con los valores con los que creaste tu base de datos MySQL. 
+El primer paso es tomar la aplicación de nuestro repositorio git, esto ya lo tiene todo preparado, lo único que debe hacer es modificar el archivo “application.properties” que están en los microservicios de usuarios, hoteles y reservas para que coincidan las siguientes dos líneas con los valores con los que creaste tu base de datos MySQL. 
 
 spring.datasource.username = 	<<Tu username personal>> 
 
 spring.datasource.password = 	<<Tu contraseña personal>> 
 
-Además también debe cambiar estos valores en el Docker compose, abajo del todo están las partes del MySQL que se debe cambiar, solo debe modificar la contraseña a la que tiene configurada en MySQL, es decir la siguiente línea de hoteles, reservas y usuarios database:  
+Además también debe cambiar estos valores en el Docker compose, abajo del todo están las partes del MySQL que se debe cambiar, solo debe modificar la contraseña a la que tiene configurada en MySQL, es decir la siguiente línea de restaurantes, reservas y clientes database:  
 
 MYSQL_ROOT_PASSWORD: 	<<Su propia contraseña>> 
 
 Con todo esto ya debería ser capaz de crear los contenedores Docker, para ello, si está usando VSC y tiene los plugins necesarios puedes hacer clic derecho sobre docker-compose.yml y clicar en la opción compose up.  
 
-Este proceso puede llevar tiempo la primera vez, pero cuando acabe podrás ver en Docker desktop los contenedores creados y operativos, el único paso que quedaría seria configurar Kong. 
-
- 
-
-Configuración de Konga. 
-
-Para configurar Konga solo debe entrar en localhost:1337 
-
-Una vez ahí, te pedirán crear un usuario 
-
-Al hacerlo te llevarán a una página en la que debe crear una conexión 
-
-Con la configuración default usaras de nombre Kong y de url http://kong:8001. 
-
-Una vez hecho esto solo debe tomar el snapshot que tenemos en el repositorio (un documento llamado snapshot.json) e importarlo desde la pestaña snapshot.  
-
-Este último paso debería dejarte usar el frontlane de angular inmediatamente pasando por el api Gateway de Kong. 
+Este proceso puede llevar tiempo la primera vez, pero cuando acabe podrás ver en Docker desktop los contenedores creados y operativo. 
