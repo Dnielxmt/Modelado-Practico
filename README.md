@@ -1,4 +1,4 @@
-# Equipo: MODELADO DE PLATAFORMAS DISTRIBUIDAS
+# MODELADO DE PLATAFORMAS DISTRIBUIDAS - Trabajo en Equipo
 
 Se necesita node y angular para que funcione, por lo que debe descargarlo.
 
