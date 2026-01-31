@@ -26,38 +26,42 @@ public class Restaurante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, unique = true)
     private int id;
 
     @Basic(optional = false)
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false)
     private String nombre;
 
     @Basic(optional = false)
-    @Column(name = "correo")
+    @Column(name = "correo", nullable = false, unique = true)
     private String correo;
 
     @Basic(optional = false)
-    @Column(name = "contrasena")
+    @Column(name = "contrasena", nullable = false)
     private String contrasena;
 
-    @Basic(optional = false)
-    @Column(name = "capacidad")
-    private int capacidad;
+    // Campos opcionales
+    @Column(name = "capacidad", nullable = true)
+    private Integer capacidad;
 
-    @Column(name = "infoAdicional")
+    @Column(name = "infoAdicional", nullable = true)
     private String infoAdicional;
 
-    @Column(name = "linkWeb")
+    @Column(name = "linkWeb", nullable = true)
     private String linkWeb;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "direccionId", referencedColumnName = "id")
     private Direccion direccion;
 
+    // ================== Constructores ==================
+
+    // Constructor vacío requerido por JPA
     public Restaurante() {}
 
-    public Restaurante(String nombre, String correo, String contrasena, int capacidad, String infoAdicional, String linkWeb, Direccion direccion) {
+    public Restaurante(String nombre, String correo, String contrasena,
+                       int capacidad, String infoAdicional, String linkWeb, Direccion direccion) {
         this.nombre = nombre;
         this.correo = correo;
         this.contrasena = contrasena;
@@ -67,24 +71,31 @@ public class Restaurante {
         this.direccion = direccion;
     }
 
-    // ======= Getters y Setters =======
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
+
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
+
     public String getContrasena() { return contrasena; }
     public void setContrasena(String contrasena) { this.contrasena = contrasena; }
-    public int getCapacidad() { return capacidad; }
-    public void setCapacidad(int capacidad) { this.capacidad = capacidad; }
+
+    public Integer getCapacidad() { return capacidad; }
+    public void setCapacidad(Integer capacidad) { this.capacidad = capacidad; }
+
     public String getInfoAdicional() { return infoAdicional; }
     public void setInfoAdicional(String infoAdicional) { this.infoAdicional = infoAdicional; }
+
     public String getLinkWeb() { return linkWeb; }
     public void setLinkWeb(String linkWeb) { this.linkWeb = linkWeb; }
+
     public Direccion getDireccion() { return direccion; }
     public void setDireccion(Direccion direccion) { this.direccion = direccion; }
 
+    // Convertir contraseña a SHA-256
     public static String convertirSHA256(String password) {
         MessageDigest md;
         try {

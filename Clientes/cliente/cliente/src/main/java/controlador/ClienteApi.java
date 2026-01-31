@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import modelo.Cliente;
 import modelo.ClienteDTO;
+import modelo.Login;
+import modelo.Registro;
 import repositorio.ClienteRepository;
 
 @RestController
@@ -45,13 +46,13 @@ public class ClienteApi {
 	 * @return Mensaje de éxito o error
 	 */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String registrarCliente(@RequestBody ClienteDTO dto) {
+    public String registrarCliente(@RequestBody Registro dto) {
         try {
-            Cliente cliente = new Cliente(
-                    dto.getNombre(),
-                    dto.getCorreo(),
-                    dto.getContrasena() // se convierte a SHA-256 en el setter/constructor
-            );
+                Cliente cliente = new Cliente(
+                        dto.getNombre(),
+                        dto.getCorreo(),
+                        dto.getContrasena() // se convierte a SHA-256 en el setter/constructor
+                );
 
             clienteRepository.saveAndFlush(cliente);
             return "Cliente registrado correctamente";
@@ -98,11 +99,12 @@ public class ClienteApi {
 	 * @return true si las credenciales son correctas, false en caso contrario
 	 */
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean iniciarSesion(@RequestParam String correo, @RequestParam String contrasena) {
-        Cliente cliente = clienteRepository.findByCorreo(correo)
+    public boolean iniciarSesion(@RequestBody Login login) {
+        Cliente cliente = clienteRepository.findByCorreo(login.getCorreo())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente no encontrado"));
 
-        String hashInput = Cliente.convertirSHA256(contrasena);
+        if (cliente == null) return false;
+        String hashInput = Cliente.convertirSHA256(login.getContrasena());
         return cliente.getContrasena().equals(hashInput);
     }
 }

@@ -22,7 +22,7 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, unique = true)
     private int id;
 
     @Basic(optional = false)
@@ -30,7 +30,7 @@ public class Cliente {
     private String nombre;
 
     @Basic(optional = false)
-    @Column(name = "correo")
+    @Column(name = "correo", nullable = false, unique = true)
     private String correo;
 
     @Basic(optional = false)

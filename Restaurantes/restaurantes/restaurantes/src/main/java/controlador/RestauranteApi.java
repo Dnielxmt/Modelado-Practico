@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import modelo.Direccion;
 import modelo.DireccionDTO;
+import modelo.Login;
+import modelo.Registro;
 import modelo.Restaurante;
 import modelo.RestauranteDTO;
 import repositorio.RestauranteRepo;
@@ -55,33 +56,19 @@ public class RestauranteApi {
 
     /**
      * Registrar nuevo restaurante
-     * @param dto: restaurante a registrar
+     * @param dto: restaurante a registrar con valores mínimos
      * @return
      */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String registrarRestaurante(@RequestBody RestauranteDTO dto) {
+    public String registrarRestaurante(@RequestBody Registro dto) {
         try {
-            // Crear objeto Direccion a partir del DTO
-            DireccionDTO dDto = dto.getDireccion();
-            Direccion direccion = new Direccion(
-                    dDto.getNombreVia(),
-                    dDto.getTipoVia(),
-                    dDto.getNumero(),
-                    dDto.getCodigoPostal(),
-                    dDto.getOtraInfo()
-            );
-
             // Crear objeto Restaurante
             String passwordCodificada = Restaurante.convertirSHA256(dto.getContrasena());
-            Restaurante restaurante = new Restaurante(
-                dto.getNombre(),
-                dto.getCorreo(),
-                passwordCodificada, 
-                dto.getCapacidad(),
-                dto.getInfoAdicional(),
-                dto.getLinkWeb(),
-                direccion
-            );
+            Restaurante restaurante = new Restaurante();
+
+            restaurante.setNombre(dto.getNombre());
+            restaurante.setCorreo(dto.getCorreo());
+            restaurante.setContrasena(passwordCodificada);
 
             restauranteRepository.saveAndFlush(restaurante);
             return "Restaurante registrado correctamente";
@@ -167,16 +154,17 @@ public class RestauranteApi {
 
     /**
      * Iniciar sesión de restaurante
-     * @param correo: correo del restaurante
-     * @param password: contraseña del restaurante
+     * @param login: Objeto Login con correo y contraseña
      * @return: Contraseña codificada del restaurante
      */
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public boolean iniciarSesion(@RequestBody String password, @RequestParam String correo) {
-        Restaurante restaurante = restauranteRepository.findByCorreo(correo)
+    public boolean iniciarSesion(@RequestBody Login login) {
+        Restaurante restaurante = restauranteRepository.findByCorreo(login.getCorreo())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Restaurante no encontrado"));
 
-        String hashInput = Restaurante.convertirSHA256(password);
+
+        if (restaurante==null) return false;
+        String hashInput = Restaurante.convertirSHA256(login.getContrasena());
 
         return restaurante.getContrasena().equals(hashInput);
     }
