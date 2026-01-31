@@ -1,6 +1,6 @@
-# Equipo11
+# MODELADO DE PLATAFORMAS DISTRIBUIDAS - Trabajo en Equipo
 
-Se necesita node y angular para que funcione, por lo que debe descargarlo.
+Se necesita Docker para poder usarlo, por lo que debera descargarlo antes.
 
 ## Getting started
 
