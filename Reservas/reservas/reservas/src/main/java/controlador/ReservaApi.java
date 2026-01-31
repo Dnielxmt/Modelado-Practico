@@ -34,10 +34,13 @@ public class ReservaApi {
     public ReservaApi(ReservasRepo ReservasRepo) {
         this.ReservasRepo = ReservasRepo;
     }
-
-    // ============================
-    // GET generales y filtrados
-    // ============================
+    /**
+     * obtiene una o varias reservas segun los parametros recibidos
+     * @param idRestaurante: Id del restaurante
+     * @param idUsuario: Id del usuario
+     * @param fecha: Fecha de la reserva
+     * @return
+     */
     @GetMapping(produces = "application/json")
     public List<Reserva> getReserva(
             @RequestParam(required = false) Integer idRestaurante,
@@ -61,9 +64,11 @@ public class ReservaApi {
         }
     }
 
-    // ============================
-    // GET por ID
-    // ============================
+    /**
+     * Obtiene una reserva por el id
+     * @param id: Id de la reserva buscada
+     * @return
+     */
     @GetMapping(value = "/{id}", produces = "application/json")
     public Reserva getReservaById(@PathVariable("id") int id) {
         return ReservasRepo.findById(id)
@@ -71,9 +76,11 @@ public class ReservaApi {
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
     }
 
-    // ============================
-    // CREAR reserva
-    // ============================
+    /**
+     * Crea una nueva reserva
+     * @param dto: Reserva que se quiere crear
+     * @return
+     */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public String crearReserva(@RequestBody ReservaDTO dto) {
 
@@ -90,9 +97,12 @@ public class ReservaApi {
         }
     }
 
-    // ============================
-    // MODIFICAR reserva
-    // ============================
+    /**
+     * Modifica una reserva existente
+     * @param id: Id de la reserva
+     * @param dto: Reserva con los nuevos datos
+     * @return
+     */
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public String modificarReserva(
             @PathVariable("id") int id,
@@ -119,9 +129,11 @@ public class ReservaApi {
         }
     }
 
-    // ============================
-    // CANCELAR reserva
-    // ============================
+    /**
+     * Cancela una reserva existente
+     * @param id: Id de la reserva existente
+     * @return
+     */
     @DeleteMapping(value = "/{id}")
     public String cancelarReserva(@PathVariable("id") int id) {
 
